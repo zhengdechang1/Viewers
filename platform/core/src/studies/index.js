@@ -15,15 +15,6 @@ import searchStudies from './searchStudies';
 import sortStudy from './sortStudy';
 
 
-// const retrieveStudiesMetadata = (server, ...res) => {
-//   let serve = JSON.parse(localStorage.getItem('serve'))
-//   console.log('serve12333r: ', serve);
-//   if (serve !== undefined || serve !== {}) {
-//     server = { ...server, ...serve }
-//   }
-//   return retrieveStudiesMetadatas(server, ...res)
-// }
-
 export const changeServe = (object) => {
 
   let list = Object.keys(object)
@@ -41,7 +32,7 @@ export const changeServe = (object) => {
             params = [server, ...params]
           }
         }
-        midFn(...params)
+        return midFn(...params)
       }
     })
     pre[item] = object[item]
@@ -54,7 +45,6 @@ let serveApi = {
   retrieveStudyMetadata,
   deleteStudyMetadataPromise,
   retrieveStudiesMetadata,
-
 }
 let serveApiExport = changeServe(serveApi)
 
