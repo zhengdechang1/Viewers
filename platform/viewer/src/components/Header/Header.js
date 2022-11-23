@@ -8,13 +8,14 @@ import { Dropdown, AboutContent, withModal } from '@ohif/ui';
 import { UserPreferences } from './../UserPreferences';
 import OHIFLogo from '../OHIFLogo/OHIFLogo.js';
 import './Header.css';
+import EditServerContent from './editServerContent'
 
 function Header(props) {
   const {
     t,
     user,
     userManager,
-    modal: { show },
+    modal: { show, hide },
     useLargeLogo,
     linkPath,
     linkText,
@@ -46,6 +47,18 @@ function Header(props) {
             content: UserPreferences,
             title: t('User Preferences'),
           }),
+      },
+      {
+        title: '服务',//t(Modify service)
+        icon: {
+          name: 'edit',
+        },
+        onClick: () => {
+          return show({
+            content: () => <EditServerContent onClose={hide} />,
+            title: '服务',
+          })
+        }
       },
     ];
 

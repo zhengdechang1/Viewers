@@ -1,3 +1,8 @@
+/*
+ * @Description:
+ * @Author: eleven
+ * @Date: 2022-11-21 21:22:32
+ */
 /**
  * Entry point for development and production PWA builds.
  * Packaged (NPM) builds go through `index-umd.js`
@@ -60,6 +65,6 @@ const appProps = {
 
 /** Create App */
 const app = React.createElement(App, appProps, null);
-
+localStorage.setItem("defaultServe", JSON.stringify(window.config))
 /** Render */
 ReactDOM.render(app, document.getElementById('root'));

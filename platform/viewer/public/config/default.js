@@ -1,3 +1,8 @@
+/*
+ * @Description:
+ * @Author: eleven
+ * @Date: 2022-11-21 21:23:57
+ */
 window.config = {
   // default: '/'
   routerBasename: '/',

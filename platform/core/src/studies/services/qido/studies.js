@@ -4,7 +4,7 @@ import DICOMWeb from '../../../DICOMWeb/';
 
 import errorHandler from '../../../errorHandler';
 import getXHRRetryRequestHook from '../../../utils/xhrRetryRequestHook';
-
+import { changeURL } from '../index'
 /**
  * Creates a QIDO date string for a date range query
  * Assumes the year is positive, at most 4 digits long.
@@ -115,8 +115,19 @@ function resultDataToStudies(resultData) {
   return studies;
 }
 
-export default function Studies(server, filter) {
+
+
+
+
+function Studies(server, filter) {
   const { staticWado } = server;
+
+  let serve = JSON.parse(localStorage.getItem('serve'))
+  console.log('server: ', serve);
+  if (serve !== undefined || serve !== {}) {
+    server = { ...server, ...serve }
+  }
+
   const config = {
     ...server,
     url: server.qidoRoot,
@@ -124,6 +135,8 @@ export default function Studies(server, filter) {
     errorInterceptor: errorHandler.getHTTPErrorHandler(),
     requestHooks: [getXHRRetryRequestHook()],
   };
+
+  console.log('config: ', config);
 
   const dicomWeb = staticWado
     ? new StaticWadoClient(config)
@@ -142,3 +155,5 @@ export default function Studies(server, filter) {
 
   return dicomWeb.searchForStudies(options).then(resultDataToStudies);
 }
+
+export default Studies
