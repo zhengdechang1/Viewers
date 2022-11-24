@@ -24,4 +24,20 @@ window.config = {
       },
     ],
   },
+  whiteLabeling: {
+    createLogoComponentFn: function (React) {
+      return React.createElement(
+        'a',
+        {
+          target: '_blank',
+          rel: 'noopener noreferrer',
+          className: 'text-purple-600 line-through',
+          href: 'https://www.jancsitech.net/',
+        },
+        React.createElement('img', {
+          src: '../assets/logo_w.png',
+        })
+      );
+    },
+  },
 };

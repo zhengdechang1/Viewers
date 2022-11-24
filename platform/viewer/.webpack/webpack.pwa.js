@@ -178,6 +178,7 @@ module.exports = (env, argv) => {
     },
   });
 
+  //configure serve proxy
   if (hasProxy) {
     mergedConfig.devServer.proxy = {};
     // mergedConfig.devServer.proxy[PROXY_TARGET] = PROXY_DOMAIN;
