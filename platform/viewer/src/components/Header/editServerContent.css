@@ -146,3 +146,49 @@
   max-width: 80%;
   display: inline-block;
 }
+
+
+.server-radio{
+      height: 100%;
+        width: 18px;
+}
+
+.form-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.current-server{
+  padding: 0px 23px;
+  display: flex;
+  width: 59%;
+}
+
+.preset{
+  /* margin-right:13px ; */
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.description{
+  flex: 3;
+}
+
+.add-server{
+flex: 3;
+display: flex;
+      align-items: center;
+      
+}
+.add-button{
+  height: 50%;
+  margin-left: 10px;
+}
+
+
+
+.add-server .input-ohif-container .input-ohif {
+  margin: 20px 0px 20px;
+}

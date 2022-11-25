@@ -2,7 +2,7 @@ import DICOMWeb from '../../../DICOMWeb/';
 import { api } from 'dicomweb-client';
 
 import errorHandler from '../../../errorHandler';
-
+import ReplaceStr from '../../../../../viewer/src/utils/replaceStr';
 /**
  * Parses data returned from a QIDO search and transforms it into
  * an array of series that are present in the study
@@ -77,11 +77,16 @@ function resultDataToStudyMetadata(server, StudyInstanceUID, resultData) {
  */
 export default function Instances(server, StudyInstanceUID) {
   // TODO: Are we using this function anywhere?? Can we remove it?
-  let serve = JSON.parse(localStorage.getItem('serve'))
-  console.log('server: ', serve);
-  if (serve !== undefined || serve !== {}) {
-    server = { ...server, ...serve }
+  let serve;
+  let replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('serve')))
+  if (!replaceStr) {
+    replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('defaultServe')))
   }
+  serve = replaceStr.serve
+  if (process.env.NODE_ENV === "development") {
+    serve = replaceStr.devServe
+  }
+  server = { ...server, ...serve }
   const config = {
     url: server.qidoRoot,
     headers: DICOMWeb.getAuthorizationHeader(server),

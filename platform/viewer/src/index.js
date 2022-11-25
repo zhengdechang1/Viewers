@@ -38,6 +38,7 @@ import OHIFDicomPDFExtension from '@ohif/extension-dicom-pdf';
 // Add this for Debugging purposes:
 //import OHIFDebuggingExtension from '@ohif/extension-debugging';
 import { version } from '../package.json';
+import ReplaceStr from './utils/replaceStr.js';
 
 /*
  * Default Settings
@@ -65,6 +66,21 @@ const appProps = {
 
 /** Create App */
 const app = React.createElement(App, appProps, null);
-localStorage.setItem("defaultServe", JSON.stringify(window.config))
+
+let serve = new ReplaceStr(window.config.servers.dicomWeb[0])
+localStorage.setItem("defaultServe", JSON.stringify(serve.ip))
+
+let serverList = JSON.parse(localStorage.getItem("serverList"))
+
+
+if (JSON.stringify(serverList) == "{}" || !serverList) {
+  localStorage.setItem('serverList', JSON.stringify([
+    { key: serve.ip, ip: serve.ip }
+  ]))
+}
+
+
+
+
 /** Render */
 ReactDOM.render(app, document.getElementById('root'));

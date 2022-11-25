@@ -13,6 +13,7 @@ import getStudyBoxData from './getStudyBoxData';
 import retrieveStudiesMetadata from './retrieveStudiesMetadata.js';
 import searchStudies from './searchStudies';
 import sortStudy from './sortStudy';
+import ReplaceStr from '../../../viewer/src/utils/replaceStr';
 
 
 export const changeServe = (object) => {
@@ -25,12 +26,24 @@ export const changeServe = (object) => {
     Object.defineProperty(object, [item], {
       value: function (...arg) {
         let [server, ...params] = arg
+        let serve;
         if (server) {
-          let serve = JSON.parse(localStorage.getItem('serve'))
-          if (!serve || JSON.stringify(serve) !== "{}") {
-            server = { ...server, ...serve }
-            params = [server, ...params]
+
+          let replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('serve')))
+          if (!replaceStr) {
+            replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('defaultServe')))
           }
+
+          serve = replaceStr.serve
+          if (process.env.NODE_ENV === "development") {
+            serve = replaceStr.devServe
+          }
+          // if (!serve || JSON.stringify(serve) !== "{}") {
+          server = { ...server, ...serve }
+
+          params = [server, ...params]
+          console.log('params: ', params);
+          // }
         }
         return midFn(...params)
       }

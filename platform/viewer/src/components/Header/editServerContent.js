@@ -4,67 +4,87 @@
  * @Date: 2022-11-22 10:27:48
  */
 import React, { useState, useEffect } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import { TextInput, Select, Icon, TabFooter } from '@ohif/ui';
-import OHIFLogo from '../OHIFLogo/OHIFLogo.js';
 import './editServerContent.css';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom'
+import ReplaceStr from '../../utils/replaceStr'
+import { servicesManager } from '../../App';
 function EditServerContent(props) {
   const {
     onClose,
   } = props;
   const { t } = useTranslation('UserPreferencesModal');
-
+  const { UINotificationService } = servicesManager.services;
   const [serveForm, setServeForm] = useState({})
+  const [option, setOption] = useState();
+  const [currentServer, setCurrentServer] = useState()
+  const [serverList, setServerList] = useState([])
+  const [addServerValue, setAddServerValue] = useState();
   const history = useHistory()
 
   useEffect(() => {
     //get form data
     let config = JSON.parse(localStorage.getItem('serve'))
-    console.log('config: ', config);
+
     if (JSON.stringify(config) == "{}" || !config) {
-      config = JSON.parse(localStorage.getItem('defaultServe'))?.servers.dicomWeb[0]
+      config = JSON.parse(localStorage.getItem('defaultServe'))
     }
-    const { qidoRoot, wadoRoot, wadoUriRoot } = config
-    setServeForm({ qidoRoot, wadoRoot, wadoUriRoot })
+
+    let serverListMid = JSON.parse(localStorage.getItem('serverList'))
+    let serve = new ReplaceStr(config)
+
+    setServerList(serverListMid)
+    setCurrentServer(serve?.ip)
   }, [])
 
-  const onChange = (value, key) => {
-    setServeForm(v => {
-      return {
-        ...v,
-        [key]: value
-      }
-    })
+  const onChange = (value) => {
+
+    setAddServerValue(value)
   }
 
   //save serve and change
   const onSave = () => {
-    let requiredList = ['wadoUriRoot', 'qidoRoot', 'wadoRoot']
-    console.log('!requiredList.some(item => item in serveForm): ', !requiredList.every(item => item in serveForm));
-    if (!requiredList.every(item => item in serveForm)) {
-      return
-    }
-    localStorage.setItem('serve', JSON.stringify(serveForm))
+    let serve = new ReplaceStr(serveForm)
+
+    localStorage.setItem('defaultServe', JSON.stringify(serve.ip))
+
     onClose()
     history.push({ pathname: '/', search: '' })
     history.go(0)
-    // windows.location.href = '/'
   }
 
-  //callback default serve
-  const onResetPreferences = () => {
-    const config = JSON.parse(localStorage.getItem('defaultServe'))?.servers.dicomWeb[0]
-    const { qidoRoot, wadoRoot, wadoUriRoot } = config
-    setServeForm({ qidoRoot, wadoRoot, wadoUriRoot })
+
+  const handleRadioChange = (e, index) => {
+    setCurrentServer(e.target.value)
   }
+
+  const addServerList = () => {
+    if (serverList.some(item => item.key == addServerValue)) {
+      UINotificationService.show({
+        title: 'Error Message Prompt',
+        message: 'Service already exists',
+        type: 'error',
+        autoClose: true,
+      });
+      return
+    }
+    setServerList(v => {
+      let list = [
+        ...v,
+        { key: addServerValue, ip: addServerValue }
+      ]
+      localStorage.setItem('serverList', JSON.stringify(list))
+      return list
+    })
+    setAddServerValue()
+  }
+
+
 
   return (
     <>
-      <div className="edit-server-content">
+      {/* <div className="edit-server-content">
         <TextInput
           type="string"
           value={serveForm.wadoUriRoot}
@@ -86,11 +106,89 @@ function EditServerContent(props) {
           onChange={evt => onChange(evt.target.value, 'wadoRoot')}
           data-cy="wadoRoot"
         />
+
+      </div> */}
+      <div className='current-server'>
+        <div className="wlColumn preset">Add server
+        </div>
+        <div className="wlColumn add-server " >
+          {/* <input
+            type="text"
+            className="preferencesInput"
+            value={addServerValue}
+            onChange={onChange}
+          /> */}
+          <TextInput
+            type="string"
+            value={addServerValue}
+            // label={t('Add Server')}
+            onChange={evt => onChange(evt.target.value)}
+          />
+          <button
+            className="btn btn-primary add-button"
+            onClick={addServerList}
+          >
+            {t('Add Server')}
+          </button>
+        </div>
+      </div>
+      <div className='current-server'>
+        <div className="wlColumn preset">Current server
+        </div>
+        <div className="wlColumn description">
+          <input
+            type="text"
+            className="preferencesInput"
+            value={currentServer}
+            disabled={true}
+          />
+        </div>
+      </div>
+      <div className="WindowLevelPreferences">
+        <div className="wlColumn">
+          <div className="wlRow header">
+            <div className="wlColumn preset">Serial Number</div>
+            <div className="wlColumn description">Server IP</div>
+            <div className="wlColumn window">Option</div>
+          </div>
+          {serverList.map((item, index) => {
+            return (
+              <div className="wlRow" key={item.key}>
+                <div className="wlColumn preset form-center">{index + 1}</div>
+                <div className="wlColumn description">
+                  <input
+                    type="text"
+                    className="preferencesInput"
+                    value={item.ip}
+                    data-key={item.key}
+                    data-inputname="description"
+                    disabled={true}
+                  // onChange={handleInputChange}
+                  />
+                </div>
+                <div className="wlColumn window form-center">
+                  <input
+                    type="radio"
+                    className="server-radio"
+                    checked={currentServer == item.key}
+                    data-key={item.key}
+                    data-inputname="window"
+                    onChange={e => {
+                      handleRadioChange(e);
+                    }}
+                    value={item.key}
+                  />
+                </div>
+
+              </div>
+            );
+          })}
+        </div>
       </div>
       <TabFooter
-        onResetPreferences={onResetPreferences}
         onSave={onSave}
         onCancel={onClose}
+        isShowReset={false}
         t={t}
       />
     </>

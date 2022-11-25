@@ -1,6 +1,6 @@
 /*
  * @Description: 
- * @Author: eleven
+ * @Author: Devin
  * @Date: 2022-11-21 21:23:57
  */
 
@@ -23,22 +23,6 @@ window.config = {
         thumbnailRendering: 'wadors',
       },
     ],
-  },
-  whiteLabeling: {
-    createLogoComponentFn: function (React) {
-      return React.createElement(
-        'a',
-        {
-          target: '_blank',
-          rel: 'noopener noreferrer',
-          className: 'text-purple-600 line-through',
-          href: 'https://www.jancsitech.net/',
-        },
-        React.createElement('img', {
-          src: '../assets/logo_w.png',
-        })
-      );
-    },
   },
   hotkeys: [
     // ~ Global
@@ -135,4 +119,20 @@ window.config = {
       keys: ['9'],
     },
   ],
+  whiteLabeling: {
+    createLogoComponentFn: function (React) {
+      return React.createElement(
+        'a',
+        {
+          target: '_blank',
+          rel: 'noopener noreferrer',
+          className: 'text-purple-600 line-through',
+          href: 'https://jancsitech.com/',
+        },
+        React.createElement('img', {
+          src: '../assets/logo_w.png',
+        })
+      );
+    },
+  },
 };
