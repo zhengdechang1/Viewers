@@ -79,7 +79,7 @@ export default function Instances(server, StudyInstanceUID) {
   // TODO: Are we using this function anywhere?? Can we remove it?
   let serve;
   let replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('serve')))
-  if (!replaceStr) {
+  if (JSON.stringify(replaceStr.serve) == "{}") {
     replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('defaultServe')))
   }
   serve = replaceStr.serve

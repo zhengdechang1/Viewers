@@ -34,7 +34,7 @@ function Header(props) {
         onClick: () =>
           show({
             content: AboutContent,
-            title: t('OHIF Viewer - About'),
+            title: t('JancsiTech Viewer - About'),
           }),
       },
       {

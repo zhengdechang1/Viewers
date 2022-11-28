@@ -30,11 +30,12 @@ export const changeServe = (object) => {
         if (server) {
 
           let replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('serve')))
-          if (!replaceStr) {
+          if (JSON.stringify(replaceStr.serve) == "{}") {
             replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('defaultServe')))
           }
 
           serve = replaceStr.serve
+
           if (process.env.NODE_ENV === "development") {
             serve = replaceStr.devServe
           }
@@ -42,7 +43,6 @@ export const changeServe = (object) => {
           server = { ...server, ...serve }
 
           params = [server, ...params]
-          console.log('params: ', params);
           // }
         }
         return midFn(...params)

@@ -15,6 +15,7 @@ class ReplaceStr {
 
     serveAddStr = function (serve) {
         console.log('serve: ', serve);
+
         if (!serve) return {}
 
         if (typeof (serve) == 'string') {
@@ -24,7 +25,7 @@ class ReplaceStr {
                 wadoRoot: serve,
             }
         }
-        console.log('serve: ', serve);
+
         serve = {
             qidoRoot: serve.qidoRoot,
             wadoRoot: serve.qidoRoot,
@@ -35,6 +36,34 @@ class ReplaceStr {
             let isInclude = serve[item].includes('http') || serve[item].includes('https')
             if (!isInclude) {
                 res[item] = item.includes('wadoUri') ? `http://${serve[item]}:8042/wado` : `http://${serve[item]}:8042/dicom-web`
+                continue;
+            }
+            res[item] = serve[item]
+        }
+        return res
+    }
+    serveAddStrDev = function (serve) {
+
+        if (!serve) return {}
+
+        if (typeof (serve) == 'string') {
+            serve = {
+                wadoUriRoot: serve,
+                qidoRoot: serve,
+                wadoRoot: serve,
+            }
+        }
+
+        serve = {
+            qidoRoot: serve.qidoRoot,
+            wadoRoot: serve.qidoRoot,
+            wadoUriRoot: serve.qidoRoot,
+        }
+        let res = {}
+        for (let item in serve) {
+            let isInclude = serve[item].includes('http') || serve[item].includes('https')
+            if (!isInclude) {
+                res[item] = item.includes('wadoUri') ? `http://${serve[item]}:8041/wado` : `http://${serve[item]}:8041/dicom-web`
                 continue;
             }
             res[item] = serve[item]

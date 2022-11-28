@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: eleven
+ * @Author: devin
  * @Date: 2022-11-22 10:27:48
  */
 import React, { useState, useEffect } from 'react';
@@ -16,8 +16,7 @@ function EditServerContent(props) {
   } = props;
   const { t } = useTranslation('UserPreferencesModal');
   const { UINotificationService } = servicesManager.services;
-  const [serveForm, setServeForm] = useState({})
-  const [option, setOption] = useState();
+  // const [serveForm, setServeForm] = useState({})
   const [currentServer, setCurrentServer] = useState()
   const [serverList, setServerList] = useState([])
   const [addServerValue, setAddServerValue] = useState();
@@ -39,19 +38,44 @@ function EditServerContent(props) {
   }, [])
 
   const onChange = (value) => {
-
     setAddServerValue(value)
   }
 
   //save serve and change
   const onSave = () => {
-    let serve = new ReplaceStr(serveForm)
+    let serve = new ReplaceStr(currentServer)
 
-    localStorage.setItem('defaultServe', JSON.stringify(serve.ip))
+    localStorage.setItem('serve', JSON.stringify(serve.ip))
 
     onClose()
     history.push({ pathname: '/', search: '' })
     history.go(0)
+  }
+
+  const pingServer = () => {
+    const start = (new Date()).getTime()
+    let server = process.env.NODE_ENV === "development" ? `/${addServerValue}` : `http://${addServerValue}`
+    fetch(server).then(() => {
+      const delta = (new Date()).getTime() - start
+      if (delta > 10000) {
+        UINotificationService.show({
+          title: 'Error Message Prompt',
+          message: 'Continuous connection timeout',
+          type: 'error',
+          autoClose: true,
+        });
+      } else {
+        addServerList()
+      }
+    }).catch((err) => {
+      console.log('err: ', err.message);
+      UINotificationService.show({
+        title: 'Error Message Prompt',
+        message: err.message ? err.message : 'Failed to fetch',
+        type: 'error',
+        autoClose: true,
+      });
+    })
   }
 
 
@@ -109,7 +133,7 @@ function EditServerContent(props) {
 
       </div> */}
       <div className='current-server'>
-        <div className="wlColumn preset">Add server
+        <div className="wlColumn preset">Add Server
         </div>
         <div className="wlColumn add-server " >
           {/* <input
@@ -126,14 +150,14 @@ function EditServerContent(props) {
           />
           <button
             className="btn btn-primary add-button"
-            onClick={addServerList}
+            onClick={pingServer}
           >
             {t('Add Server')}
           </button>
         </div>
       </div>
       <div className='current-server'>
-        <div className="wlColumn preset">Current server
+        <div className="wlColumn preset">Current Server
         </div>
         <div className="wlColumn description">
           <input

@@ -123,16 +123,20 @@ function resultDataToStudies(resultData) {
 function Studies(server, filter) {
   const { staticWado } = server;
   let replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('serve')))
-  if (!replaceStr) {
+  console.log('JSON.stringify(replaceStr): ', JSON.stringify(replaceStr), JSON.stringify(replaceStr) == "{}");
+  if (JSON.stringify(replaceStr.serve) == "{}") {
     replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('defaultServe')))
   }
   let serve = replaceStr.serve
+
   if (process.env.NODE_ENV === "development") {
     serve = replaceStr.devServe
+
   }
 
   if (serve !== undefined || serve !== {}) {
     server = { ...server, ...serve }
+
   }
 
   const config = {
