@@ -34,7 +34,7 @@ function EditServerContent(props) {
     let serve = new ReplaceStr(config)
 
     setServerList(serverListMid)
-    setCurrentServer(serve?.ip)
+    setCurrentServer(serve.ip)
   }, [])
 
   const onChange = (value) => {

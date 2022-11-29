@@ -108,7 +108,7 @@ class ReplaceStr {
         let res = {}
         let reg_str = /\d+\.\d+\.\d+\.\d+/
         for (let item in serve) {
-            res[item] = serve[item].match(reg_str)?.[0]
+            res[item] = serve[item].match(reg_str)[0]
         }
         return res
     }
