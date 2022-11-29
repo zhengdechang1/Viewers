@@ -12,6 +12,9 @@
 注意：node.js 和 yarn 与 cnpm 需提前安装
 
 ```bash
+# 切换分支jancsi_internal
+git checkout  jancsi_internal
+
 # 切换镜像
 yarn config set workspaces-experimental true
 
