@@ -14,8 +14,12 @@ import user from '../user';
  * @param {string|function} [server.requestOptions.auth]
  * @returns {Object} { Authorization }
  */
-export default function getAuthorizationHeader({ requestOptions } = {}) {
-  console.log('requestOptions: ', requestOptions);
+export default function getAuthorizationHeader({ requestOptions } = {
+  requestOptions: {
+    auth: 'orthanc:orthanc',
+  }
+}) {
+
 
   const headers = {};
 
@@ -42,7 +46,7 @@ export default function getAuthorizationHeader({ requestOptions } = {}) {
   // headers['Access-Control-Allow-Methods'] = 'PUT,GET,POST,DELETE,OPTIONS'
   // headers['Access-Control-Allow-Credentials'] = true
   // headers['Access-Control-Max-Age'] = '86400'
-  console.log('headers: ', headers);
+
   return headers;
 
 

@@ -123,7 +123,7 @@ function resultDataToStudies(resultData) {
 function Studies(server, filter) {
   const { staticWado } = server;
   let replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('serve')))
-  console.log('JSON.stringify(replaceStr): ', JSON.stringify(replaceStr), JSON.stringify(replaceStr) == "{}");
+
   if (JSON.stringify(replaceStr.serve) == "{}") {
     replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('defaultServe')))
   }
@@ -138,7 +138,7 @@ function Studies(server, filter) {
     server = { ...server, ...serve }
 
   }
-  console.log('DICOMWeb.getAuthorizationHeader(server): ', DICOMWeb.getAuthorizationHeader(server));
+
   const config = {
     ...server,
     url: server.qidoRoot,
