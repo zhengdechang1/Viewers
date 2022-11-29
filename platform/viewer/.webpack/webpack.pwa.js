@@ -192,6 +192,11 @@ module.exports = (env, argv) => {
       changeOrigin: true,//控制服务器收到的请求头中Host的值
       pathRewrite: { '^/10.10.99.8:8042/dicom-web': '' } //重写请求路径，下面有示例解释
     }
+    mergedConfig.devServer.proxy["/10.10.99.208:80/orthanc/dicom-web"] = {
+      target: 'http://10.10.99.208:80/orthanc/dicom-web',
+      changeOrigin: true,//控制服务器收到的请求头中Host的值
+      pathRewrite: { '^/10.10.99.208:80/orthanc/dicom-web': '' } //重写请求路径，下面有示例解释
+    }
 
     console.log('mergedConfig.devServer.proxy: ', mergedConfig.devServer.proxy);
   }

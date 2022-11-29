@@ -138,11 +138,13 @@ function Studies(server, filter) {
     server = { ...server, ...serve }
 
   }
-
+  console.log('DICOMWeb.getAuthorizationHeader(server): ', DICOMWeb.getAuthorizationHeader(server));
   const config = {
     ...server,
     url: server.qidoRoot,
-    headers: DICOMWeb.getAuthorizationHeader(server),
+    headers: {
+      ...DICOMWeb.getAuthorizationHeader(server),
+    },
     errorInterceptor: errorHandler.getHTTPErrorHandler(),
     requestHooks: [getXHRRetryRequestHook()],
   };
