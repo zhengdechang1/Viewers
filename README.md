@@ -1,3 +1,8 @@
+<!--
+ * @Description:
+ * @Author: Devin
+ * @Date: 2022-11-21 21:21:14
+-->
 <div align="center">
   <h1>OHIF Medical Imaging Viewer</h1>
 </div>
@@ -13,7 +18,8 @@ yarn config set workspaces-experimental true
 # 安装依赖
 yarn install
 
-
+//react-transition-group依赖出错问题
+cnpm  install  pdfjs-dist@2.2.228 react-transition-group@4.2.1 --save
 #打包命令
 yarn build
 
@@ -24,11 +30,25 @@ yarn build
 
 <hr />
 
-## 2、nginx 配置
+## 2、OHIF 前端服务配置
+
+```js
+ server {
+        listen       8042;#①配置访问端口
+        server_name  localhost;#②配置访问方式
+
+        location / {
+            root   /home/dechang/dist;
+            index  index.html index.htm;
+                }
+    }
+```
+
+## 3、nginx Orthanc 后端服务配置
 
 ```js
 server {
-   listen  80  default_server;
+   listen  2099  default_server;
    location  /  {
 	  add_header  'Access-Control-Allow-Credentials' 'true' always;
       add_header  'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type' always;
@@ -50,7 +70,7 @@ server {
 
 ```
 
-## 3、文件目录
+## 4、文件目录
 
 ```bash
 .
