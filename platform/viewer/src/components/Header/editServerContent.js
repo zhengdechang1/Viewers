@@ -156,7 +156,7 @@ function EditServerContent(props) {
           <TextInput
             type="string"
             value={addServerValue}
-            placeholder={t('Please Input Host')}
+            placeholder={t('Please Enter Host')}
             onChange={evt => onChange(evt.target.value)}
             style={{ marginLeft: '20px' }}
           />
