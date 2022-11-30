@@ -84,6 +84,9 @@ function Header(props) {
         title: item.alias ? `${item.alias}(${item.ip})` : item.ip,
         active: item.ip == currentIp,
         onClick: () => {
+          if (item.ip == currentIp) {
+            return
+          }
           localStorage.setItem('serve', JSON.stringify(item.ip))
           history.push({ pathname: '/', search: '' })
           history.go(0)
@@ -104,7 +107,7 @@ function Header(props) {
         }
       },
     ]
-    setOptionsServe([...serveOptionsValue, ...res])
+    setOptionsServe([...res, ...serveOptionsValue,])
   }
 
 

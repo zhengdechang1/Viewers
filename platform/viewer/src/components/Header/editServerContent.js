@@ -49,11 +49,21 @@ function EditServerContent(props) {
     setAddServerValueAlias(value)
   }
 
+  const serveListOnchange = (key, value, index) => {
+    let list = JSON.parse(JSON.stringify(serverList))
+    list.splice(index, 1, {
+      key: key,
+      ip: key,
+      alias: value
+    })
+    setServerList(list)
+  }
+
   //save serve and change
   const onSave = () => {
-
-    let serve = new ReplaceStr(currentServer)
-    localStorage.setItem('serve', JSON.stringify(serve.ip))
+    // let serve = new ReplaceStr(currentServer)
+    // localStorage.setItem('serve', JSON.stringify(serve.ip))
+    localStorage.setItem('serverList', JSON.stringify(serverList))
     getServeList()
     onClose()
     // history.push({ pathname: '/', search: '' })
@@ -126,55 +136,25 @@ function EditServerContent(props) {
 
   return (
     <>
-      {/* <div className="edit-server-content">
-        <TextInput
-          type="string"
-          value={serveForm.wadoUriRoot}
-          label={t('server wadoUriRoot：')}
-          onChange={evt => onChange(evt.target.value, 'wadoUriRoot')}
-          data-cy="wadoUriRoot"
-        />
-        <TextInput
-          type="string"
-          value={serveForm.qidoRoot}
-          label={t('server qidoRoot：')}
-          onChange={evt => onChange(evt.target.value, 'qidoRoot')}
-          data-cy="qidoRoot"
-        />
-        <TextInput
-          type="string"
-          value={serveForm.wadoRoot}
-          label={t('server wadoRoot：')}
-          onChange={evt => onChange(evt.target.value, 'wadoRoot')}
-          data-cy="wadoRoot"
-        />
-
-      </div> */}
       <div className='add-server-alias'>
         <div className="wlColumn preset">Add Server
         </div>
         <div className="wlColumn add-server" >
-          {/* <input
-            type="text"
-            className="preferencesInput"
-            value={addServerValue}
-            onChange={onChange}
-          /> */}
-          <TextInput
-            type="string"
-            value={addServerValue}
-            // label={t('Add Server')}
-            placeholder={t('Please Input IP')}
-            onChange={evt => onChange(evt.target.value)}
-          />
           <TextInput
             type="string"
             value={addServerValueAlias}
-            // label={t('Add Server')}
             placeholder={t('Please Server Alias')}
             onChange={evt => onChangeAlias(evt.target.value)}
+
+          />
+          <TextInput
+            type="string"
+            value={addServerValue}
+            placeholder={t('Please Input Host')}
+            onChange={evt => onChange(evt.target.value)}
             style={{ marginLeft: '20px' }}
           />
+
           <button
             className="btn btn-primary add-button"
             onClick={pingServer}
@@ -199,25 +179,14 @@ function EditServerContent(props) {
         <div className="wlColumn">
           <div className="wlRow header">
             <div className="wlColumn preset">Serial Number</div>
-            <div className="wlColumn description">Server IP</div>
             <div className="wlColumn window">Server Alias</div>
+            <div className="wlColumn description">Server Host</div>
             {/* <div className="wlColumn preset">Option</div> */}
           </div>
           {serverList.map((item, index) => {
             return (
               <div className="wlRow" key={item.key}>
                 <div className="wlColumn preset form-center">{index + 1}</div>
-                <div className="wlColumn description" >
-                  <input
-                    type="text"
-                    className="preferencesInput"
-                    value={item.ip}
-                    data-key={item.key}
-                    data-inputname="description"
-                    disabled={true}
-                  // onChange={handleInputChange}
-                  />
-                </div>
                 <div className="wlColumn window form-center">
                   <input
                     type="text"
@@ -225,10 +194,24 @@ function EditServerContent(props) {
                     value={item.alias}
                     data-key={item.key}
                     data-inputname="description"
+                    // disabled={true}
+                    // onChange={handleInputChange}
+                    onChange={(e) => serveListOnchange(item.key, e.target.value, index)}
+                  />
+                </div>
+                <div className="wlColumn description" >
+                  <input
+                    type="text"
+                    className="preferencesInput"
+                    defaultValue={item.ip}
+                    data-key={item.key}
+                    data-inputname="description"
                     disabled={true}
+
                   // onChange={handleInputChange}
                   />
                 </div>
+
                 {/* <div className="wlColumn preset form-center">
                   <input
                     type="radio"
