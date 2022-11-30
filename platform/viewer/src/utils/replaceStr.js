@@ -16,7 +16,7 @@ class ReplaceStr {
 
 
     serveAddStr = function (serve) {
-        console.log('serve: ', serve);
+
 
         if (!serve) return {}
 
@@ -46,7 +46,7 @@ class ReplaceStr {
     }
 
     serveAddStrOrthanc = function (serve) {
-        console.log('serve: ', serve);
+
 
         if (!serve) return {}
 
