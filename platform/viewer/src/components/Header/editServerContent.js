@@ -13,6 +13,7 @@ import { servicesManager } from '../../App';
 function EditServerContent(props) {
   const {
     onClose,
+    getServeList
   } = props;
   const { t } = useTranslation('UserPreferencesModal');
   const { UINotificationService } = servicesManager.services;
@@ -20,6 +21,7 @@ function EditServerContent(props) {
   const [currentServer, setCurrentServer] = useState()
   const [serverList, setServerList] = useState([])
   const [addServerValue, setAddServerValue] = useState();
+  const [addServerValueAlias, setAddServerValueAlias] = useState();
   const history = useHistory()
 
   useEffect(() => {
@@ -38,21 +40,36 @@ function EditServerContent(props) {
   }, [])
 
   const onChange = (value) => {
+    // if (!addServerValueAlias) {
+    //   setAddServerValueAlias(value)
+    // }
     setAddServerValue(value)
+  }
+  const onChangeAlias = (value) => {
+    setAddServerValueAlias(value)
   }
 
   //save serve and change
   const onSave = () => {
+
     let serve = new ReplaceStr(currentServer)
-
     localStorage.setItem('serve', JSON.stringify(serve.ip))
-
+    getServeList()
     onClose()
-    history.push({ pathname: '/', search: '' })
-    history.go(0)
+    // history.push({ pathname: '/', search: '' })
+    // history.go(0)
   }
 
   const pingServer = () => {
+    if (addServerValue && !addServerValueAlias) {
+      UINotificationService.show({
+        title: 'Alias Is Required',
+        message: 'Please input an alias',
+        type: 'warning',
+        autoClose: true,
+      });
+      return
+    }
     const start = (new Date()).getTime()
     let server = process.env.NODE_ENV === "development" ? `/${addServerValue}:2099` : `http://${addServerValue}:2099`
     fetch(server, { mode: 'no-cors', }).then(() => {
@@ -68,7 +85,7 @@ function EditServerContent(props) {
         addServerList()
       }
     }).catch((err) => {
-      console.log('err: ', err.message);
+
       UINotificationService.show({
         title: 'Error Message Prompt',
         message: err.message ? err.message : 'Failed to fetch',
@@ -86,9 +103,9 @@ function EditServerContent(props) {
   const addServerList = () => {
     if (serverList.some(item => item.key == addServerValue)) {
       UINotificationService.show({
-        title: 'Error Message Prompt',
+        title: 'Waning Message Prompt',
         message: 'Service already exists',
-        type: 'error',
+        type: 'warning',
         autoClose: true,
       });
       return
@@ -96,12 +113,13 @@ function EditServerContent(props) {
     setServerList(v => {
       let list = [
         ...v,
-        { key: addServerValue, ip: addServerValue }
+        { key: addServerValue, ip: addServerValue, alias: addServerValueAlias }
       ]
       localStorage.setItem('serverList', JSON.stringify(list))
       return list
     })
     setAddServerValue()
+    setAddServerValueAlias()
   }
 
 
@@ -132,10 +150,10 @@ function EditServerContent(props) {
         />
 
       </div> */}
-      <div className='current-server'>
+      <div className='add-server-alias'>
         <div className="wlColumn preset">Add Server
         </div>
-        <div className="wlColumn add-server " >
+        <div className="wlColumn add-server" >
           {/* <input
             type="text"
             className="preferencesInput"
@@ -146,7 +164,16 @@ function EditServerContent(props) {
             type="string"
             value={addServerValue}
             // label={t('Add Server')}
+            placeholder={t('Please Input IP')}
             onChange={evt => onChange(evt.target.value)}
+          />
+          <TextInput
+            type="string"
+            value={addServerValueAlias}
+            // label={t('Add Server')}
+            placeholder={t('Please Server Alias')}
+            onChange={evt => onChangeAlias(evt.target.value)}
+            style={{ marginLeft: '20px' }}
           />
           <button
             className="btn btn-primary add-button"
@@ -156,7 +183,7 @@ function EditServerContent(props) {
           </button>
         </div>
       </div>
-      <div className='current-server'>
+      {/* <div className='current-server'>
         <div className="wlColumn preset">Current Server
         </div>
         <div className="wlColumn description">
@@ -167,19 +194,20 @@ function EditServerContent(props) {
             disabled={true}
           />
         </div>
-      </div>
+      </div> */}
       <div className="WindowLevelPreferences">
         <div className="wlColumn">
           <div className="wlRow header">
             <div className="wlColumn preset">Serial Number</div>
             <div className="wlColumn description">Server IP</div>
-            <div className="wlColumn window">Option</div>
+            <div className="wlColumn window">Server Alias</div>
+            {/* <div className="wlColumn preset">Option</div> */}
           </div>
           {serverList.map((item, index) => {
             return (
               <div className="wlRow" key={item.key}>
                 <div className="wlColumn preset form-center">{index + 1}</div>
-                <div className="wlColumn description">
+                <div className="wlColumn description" >
                   <input
                     type="text"
                     className="preferencesInput"
@@ -192,17 +220,28 @@ function EditServerContent(props) {
                 </div>
                 <div className="wlColumn window form-center">
                   <input
+                    type="text"
+                    className="preferencesInput"
+                    value={item.alias}
+                    data-key={item.key}
+                    data-inputname="description"
+                    disabled={true}
+                  // onChange={handleInputChange}
+                  />
+                </div>
+                {/* <div className="wlColumn preset form-center">
+                  <input
                     type="radio"
                     className="server-radio"
                     checked={currentServer == item.key}
                     data-key={item.key}
-                    data-inputname="window"
+                    data-inputname="preset"
                     onChange={e => {
                       handleRadioChange(e);
                     }}
                     value={item.key}
-                  />
-                </div>
+                  /> */}
+                {/* </div> */}
 
               </div>
             );

@@ -144,3 +144,12 @@
     display: none;
   }
 }
+
+
+.add-serve .dd-menu-list {
+min-width: 150px;
+}
+.add-serve .active{
+  color: #91b9cd;
+  background: #3e474c;
+}

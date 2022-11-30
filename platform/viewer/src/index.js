@@ -75,7 +75,7 @@ let serverList = JSON.parse(localStorage.getItem("serverList"))
 
 if (JSON.stringify(serverList) == "{}" || !serverList) {
   localStorage.setItem('serverList', JSON.stringify([
-    { key: serve.ip, ip: serve.ip }
+    { key: serve.ip, ip: serve.ip, alias: serve.ip }
   ]))
 }
 

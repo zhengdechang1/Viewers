@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Dropdown, AboutContent, withModal } from '@ohif/ui';
-//
+import { useHistory } from 'react-router-dom'
 import { UserPreferences } from './../UserPreferences';
 import OHIFLogo from '../OHIFLogo/OHIFLogo.js';
 import './Header.css';
@@ -22,8 +22,9 @@ function Header(props) {
     location,
     children,
   } = props;
-
+  const history = useHistory()
   const [options, setOptions] = useState([]);
+  const [optionsServe, setOptionsServe] = useState([]);
   const hasLink = linkText && linkPath;
 
   useEffect(() => {
@@ -48,19 +49,10 @@ function Header(props) {
             title: t('User Preferences'),
           }),
       },
-      {
-        title: '服务',//t(Modify service)
-        icon: {
-          name: 'edit',
-        },
-        onClick: () => {
-          return show({
-            content: () => <EditServerContent onClose={hide} />,
-            title: '服务',
-          })
-        }
-      },
+
     ];
+
+
 
     if (user && userManager) {
       optionsValue.push({
@@ -71,7 +63,50 @@ function Header(props) {
     }
 
     setOptions(optionsValue);
+    getServeList()
   }, [setOptions, show, t, user, userManager]);
+
+  const getServeList = () => {
+    //get form data
+    let currentIp = JSON.parse(localStorage.getItem('serve'))
+
+    if (JSON.stringify(currentIp) == "{}" || !currentIp) {
+      currentIp = JSON.parse(localStorage.getItem('defaultServe'))
+
+    }
+
+    console.log('currentIp: ', currentIp);
+
+
+    let serverListMid = JSON.parse(localStorage.getItem('serverList'))
+    let res = serverListMid.map(item => {
+      return {
+        title: item.alias ? `${item.alias}(${item.ip})` : item.ip,
+        active: item.ip == currentIp,
+        onClick: () => {
+          localStorage.setItem('serve', JSON.stringify(item.ip))
+          history.push({ pathname: '/', search: '' })
+          history.go(0)
+        }
+      }
+    })
+    const serveOptionsValue = [
+      {
+        title: '新增服务',//t(Modify service)
+        icon: {
+          name: 'edit',
+        },
+        onClick: () => {
+          return show({
+            content: () => <EditServerContent onClose={hide} getServeList={getServeList} />,
+            title: '服务',
+          })
+        }
+      },
+    ]
+    setOptionsServe([...serveOptionsValue, ...res])
+  }
+
 
   return (
     <>
@@ -106,7 +141,14 @@ function Header(props) {
 
         <div className="header-menu">
           <span className="research-use">{t('INVESTIGATIONAL USE ONLY')}</span>
+          <Dropdown
+            title={t('服务器')}
+            list={optionsServe}
+            align="right"
+            className='add-serve'
+          />
           <Dropdown title={t('Options')} list={options} align="right" />
+
         </div>
       </div>
     </>
