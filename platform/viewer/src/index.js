@@ -74,15 +74,16 @@ let serverList = JSON.parse(localStorage.getItem("serverList"))
 
 
 const defaultServerList = [
-  '10.10.99.88',
-  '10.10.99.8',
-  '10.10.99.123',
-  '10.10.99.208',
+  { ip: '10.10.99.8', alias: "prod orthanc" },
+  { ip: '10.10.99.208', alias: "dev orthanc" },
+  { ip: '10.10.99.88', alias: "prod qimaging" },
+  { ip: '10.10.99.123', alias: "dev qimaging" },
+
 ]
 
 if (JSON.stringify(serverList) == "{}" || !serverList) {
   localStorage.setItem('serverList', JSON.stringify(defaultServerList.map(serve => {
-    return { key: serve, ip: serve, alias: serve }
+    return { key: serve.ip, ip: serve.ip, alias: serve.alias }
   })))
 }
 

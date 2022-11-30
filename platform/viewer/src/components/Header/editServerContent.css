@@ -196,5 +196,13 @@ display: flex;
 .add-server-alias{
     padding: 0px 23px;
       display: flex;
-      width: 85%;
+        width: 79.1%;
+}
+
+.operation{
+  flex-grow: 0.2 !important;
+}
+
+.dd-item-icon{
+  cursor: pointer;
 }

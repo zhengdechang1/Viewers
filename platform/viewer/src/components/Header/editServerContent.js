@@ -74,7 +74,7 @@ function EditServerContent(props) {
     if (addServerValue && !addServerValueAlias) {
       UINotificationService.show({
         title: 'Alias Is Required',
-        message: 'Please input an alias',
+        message: 'Please Enter An Alias',
         type: 'warning',
         autoClose: true,
       });
@@ -132,6 +132,12 @@ function EditServerContent(props) {
     setAddServerValueAlias()
   }
 
+  const deleteServer = (index) => {
+    let list = JSON.parse(JSON.stringify(serverList))
+    list.splice(index, 1)
+    setServerList(list)
+  }
+
 
 
   return (
@@ -143,7 +149,7 @@ function EditServerContent(props) {
           <TextInput
             type="string"
             value={addServerValueAlias}
-            placeholder={t('Please Server Alias')}
+            placeholder={t('Please Enter Server Alias')}
             onChange={evt => onChangeAlias(evt.target.value)}
 
           />
@@ -181,7 +187,7 @@ function EditServerContent(props) {
             <div className="wlColumn preset">Serial Number</div>
             <div className="wlColumn window">Server Alias</div>
             <div className="wlColumn description">Server Host</div>
-            {/* <div className="wlColumn preset">Option</div> */}
+            {/* <div className="wlColumn preset operation">Operation</div> */}
           </div>
           {serverList.map((item, index) => {
             return (
@@ -212,8 +218,9 @@ function EditServerContent(props) {
                   />
                 </div>
 
-                {/* <div className="wlColumn preset form-center">
-                  <input
+                <div className="wlColumn preset form-center operation" >
+                  {index > 3 && <Icon name='delete' className="dd-item-icon" onClick={() => deleteServer(index)} />}
+                  {/* <input
                     type="radio"
                     className="server-radio"
                     checked={currentServer == item.key}
@@ -224,8 +231,7 @@ function EditServerContent(props) {
                     }}
                     value={item.key}
                   /> */}
-                {/* </div> */}
-
+                </div>
               </div>
             );
           })}

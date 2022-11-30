@@ -27,6 +27,8 @@ function Header(props) {
   const [optionsServe, setOptionsServe] = useState([]);
   const hasLink = linkText && linkPath;
 
+  const [currentAlias, setCurrentAlias] = useState('服务器')
+
   useEffect(() => {
     const optionsValue = [
       {
@@ -67,18 +69,16 @@ function Header(props) {
   }, [setOptions, show, t, user, userManager]);
 
   const getServeList = () => {
+
     //get form data
     let currentIp = JSON.parse(localStorage.getItem('serve'))
 
     if (JSON.stringify(currentIp) == "{}" || !currentIp) {
       currentIp = JSON.parse(localStorage.getItem('defaultServe'))
-
     }
 
-
-
-
     let serverListMid = JSON.parse(localStorage.getItem('serverList'))
+    setCurrentAlias(`当前服务器：${serverListMid.filter(i => i.key == currentIp)[0].alias}`)
     let res = serverListMid.map(item => {
       return {
         title: item.alias ? `${item.alias}(${item.ip})` : item.ip,
@@ -145,7 +145,7 @@ function Header(props) {
         <div className="header-menu">
           <span className="research-use">{t('INVESTIGATIONAL USE ONLY')}</span>
           <Dropdown
-            title={t('服务器')}
+            title={t(currentAlias)}
             list={optionsServe}
             align="right"
             className='add-serve'
