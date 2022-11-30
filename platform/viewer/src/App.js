@@ -115,7 +115,7 @@ class App extends Component {
     super(props);
 
     const { config, defaultExtensions } = props;
-    console.log('config:111 ', config);
+
 
     const appDefaultConfig = {
       showStudyList: true,

@@ -22,7 +22,7 @@ export const changeServe = (object) => {
 
   let res = list.reduce((pre, item) => {
     let midFn = object[item]
-    console.log('midFn: ', midFn);
+
     Object.defineProperty(object, [item], {
       value: function (...arg) {
         let [server, ...params] = arg

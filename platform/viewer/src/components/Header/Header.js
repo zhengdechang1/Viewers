@@ -75,7 +75,7 @@ function Header(props) {
 
     }
 
-    console.log('currentIp: ', currentIp);
+
 
 
     let serverListMid = JSON.parse(localStorage.getItem('serverList'))
