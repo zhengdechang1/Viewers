@@ -54,7 +54,7 @@ function EditServerContent(props) {
 
   const pingServer = () => {
     const start = (new Date()).getTime()
-    let server = process.env.NODE_ENV === "development" ? `/${addServerValue}` : `http://${addServerValue}`
+    let server = process.env.NODE_ENV === "development" ? `/${addServerValue}:2099` : `http://${addServerValue}:2099`
     fetch(server, { mode: 'no-cors', }).then(() => {
       const delta = (new Date()).getTime() - start
       if (delta > 10000) {

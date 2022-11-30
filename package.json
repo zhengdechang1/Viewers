@@ -12,7 +12,7 @@
   },
   "scripts": {
     "cm": "npx git-cz",
-    "build": "lerna run build:orthanc --stream",
+    "build": "lerna run build:viewer --stream",
     "build:lt": "lerna run build:viewer:lesion-tracker --stream",
     "build:ci": "lerna run build:viewer:ci --stream",
     "build:demo": "lerna run build:viewer:demo --stream",
@@ -43,11 +43,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
-    "core-js": "^3.2.1",
-    "pdfjs-dist": "^2.2.228",
-    "react-transition-group": "^4.2.1",
-    "worker-loader": "^2.0.0",
-    "yarn": "^1.22.19"
+    "core-js": "^3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
