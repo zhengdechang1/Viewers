@@ -187,7 +187,7 @@ function EditServerContent(props) {
             <div className="wlColumn preset">Serial Number</div>
             <div className="wlColumn window">Server Alias</div>
             <div className="wlColumn description">Server Host</div>
-            {/* <div className="wlColumn preset operation">Operation</div> */}
+            <div className="wlColumn preset operation"></div>
           </div>
           {serverList.map((item, index) => {
             return (
