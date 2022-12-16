@@ -1,0 +1,53 @@
+.measurementTableHeader {
+  padding-left: 0px;
+}
+
+.measurementTableHeaderItem {
+  display: inline-block;
+  margin-top: 9px;
+  margin-left: 9px;
+  padding-left: 9px;
+  width: 90px;
+  font-size: 14px;
+  line-height: 20px;
+  border-left: 1px solid var(--text-secondary-color);
+  color: var(--text-primary-color);
+}
+.timepointLabel {
+  color: var(--text-secondary-color);
+  font-size: 12px;
+}
+
+.info-item {
+  display: flex;
+  background-color: var(--ui-gray-darker);
+  color: var(--text-secondary-color);
+  display: flex;
+  height: 63px;
+  line-height: 63px;
+  margin-top: 10px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.info-item-title {
+  color: var(--text-secondary-color);
+  /* max-width: 230px; */
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 63px;
+  padding: 0 10px;
+  text-align: left;
+  flex: 1;
+}
+
+.info-item-items {
+  color: var(--ui-sky-blue);
+  flex: 2;
+  float: right;
+  font-weight: 300;
+  font-size: 17px;
+  /* max-width: 54px; */
+  height: 63px;
+  line-height: 66px;
+}
