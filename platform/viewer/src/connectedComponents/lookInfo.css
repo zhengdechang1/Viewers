@@ -1,5 +1,6 @@
 .measurementTableHeader {
   padding-left: 0px;
+  margin-bottom: 10px;
 }
 
 .measurementTableHeaderItem {
@@ -50,4 +51,19 @@
   /* max-width: 54px; */
   height: 63px;
   line-height: 66px;
+}
+
+:where(.css-dev-only-do-not-override-26rdvq).ant-tree {
+  color: var(--ui-sky-blue);
+
+  background: #151a1f;
+}
+
+.site-tree-search-value {
+  color: #ec2323db;
+}
+
+.ant-tree-title {
+  word-break: break-all;
+  user-select: text;
 }

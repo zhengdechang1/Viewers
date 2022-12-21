@@ -16,7 +16,7 @@ function resultDataToStudyMetadata(server, StudyInstanceUID, resultData) {
   const seriesMap = {};
   const series = [];
 
-  resultData.forEach(function (instance) {
+  resultData.forEach(function(instance) {
     // Use seriesMap to cache series data
     // If the series instance UID has already been used to
     // process series data, continue using that series
@@ -78,15 +78,17 @@ function resultDataToStudyMetadata(server, StudyInstanceUID, resultData) {
 export default function Instances(server, StudyInstanceUID) {
   // TODO: Are we using this function anywhere?? Can we remove it?
   let serve;
-  let replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('serve')))
-  if (JSON.stringify(replaceStr.serve) == "{}") {
-    replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('defaultServe')))
+  let replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('serve')));
+  if (JSON.stringify(replaceStr.serve) == '{}') {
+    replaceStr = new ReplaceStr(
+      JSON.parse(localStorage.getItem('defaultServe'))
+    );
   }
-  serve = replaceStr.serve
-  if (process.env.NODE_ENV === "development") {
-    serve = replaceStr.devServe
+  serve = replaceStr.serve;
+  if (process.env.NODE_ENV === 'development') {
+    serve = replaceStr.devServe;
   }
-  server = { ...server, ...serve }
+  server = { ...server, ...serve };
   const config = {
     url: server.qidoRoot,
     headers: DICOMWeb.getAuthorizationHeader(server),

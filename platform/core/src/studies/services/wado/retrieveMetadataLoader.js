@@ -1,4 +1,3 @@
-
 /**
  * Class to define inheritance of load retrieve strategy.
  * The process can be async load (lazy) or sync load
@@ -28,7 +27,6 @@ export default class RetrieveMetadataLoader {
 
     const postLoadData = await this.posLoad(loadData);
 
-
     return postLoadData;
   }
 
@@ -57,8 +55,8 @@ export default class RetrieveMetadataLoader {
   }
 
   // Methods to be overwrite
-  async configLoad() { }
-  async preLoad() { }
-  async load(preLoadData) { }
-  async posLoad(loadData) { }
+  async configLoad() {}
+  async preLoad() {}
+  async load(preLoadData) {}
+  async posLoad(loadData) {}
 }

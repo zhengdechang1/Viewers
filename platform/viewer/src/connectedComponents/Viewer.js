@@ -300,7 +300,9 @@ class Viewer extends Component {
         } else if (comp.id === this.state.selectedLeftSidePanel) {
           VisiblePanelLeft = comp.component;
         } else if ('look-info' === this.state.selectedRightSidePanel) {
-          VisiblePanelRight = props => <LookInfo {...props} />;
+          VisiblePanelRight = props => (
+            <LookInfo state={this.state} {...props} {...this.props} />
+          );
         }
       });
     });

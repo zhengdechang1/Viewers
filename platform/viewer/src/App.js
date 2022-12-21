@@ -45,7 +45,6 @@ import {
 
 /** Extensions */
 import { GenericViewerCommands, MeasurementsPanel } from './appExtensions';
-
 /** Viewer */
 import OHIFStandaloneViewer from './OHIFStandaloneViewer';
 
@@ -82,7 +81,6 @@ window.ohif.app = {
   extensionManager,
 };
 
-
 class App extends Component {
   static propTypes = {
     config: PropTypes.oneOfType([
@@ -116,7 +114,6 @@ class App extends Component {
 
     const { config, defaultExtensions } = props;
 
-
     const appDefaultConfig = {
       showStudyList: true,
       cornerstoneExtensionConfig: {},
@@ -124,26 +121,28 @@ class App extends Component {
       routerBasename: '/',
     };
 
+    const newConfig = JSON.parse(localStorage.getItem('serve'));
+    const { qidoRoot, wadoRoot, wadoUriRoot } = { ...newConfig };
 
-    const newConfig = JSON.parse(localStorage.getItem('serve'))
-    const { qidoRoot, wadoRoot, wadoUriRoot } = { ...newConfig }
-
-    let newServers = config.servers
+    let newServers = config.servers;
     if (qidoRoot && wadoRoot && wadoUriRoot) {
       newServers = {
         dicomWeb: [
           {
             ...config.servers.dicomWeb[0],
-            qidoRoot, wadoRoot, wadoUriRoot
-          }
-        ]
-      }
+            qidoRoot,
+            wadoRoot,
+            wadoUriRoot,
+          },
+        ],
+      };
     }
-
 
     this._appConfig = {
       ...appDefaultConfig,
-      ...(typeof config === 'function' ? config({ servicesManager }) : { ...config, servers: newServers }),
+      ...(typeof config === 'function'
+        ? config({ servicesManager })
+        : { ...config, servers: newServers }),
     };
 
     const {
