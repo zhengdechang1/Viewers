@@ -22,7 +22,8 @@ yarn config set workspaces-experimental true
 yarn install
 
 
-cnpm  install  pdfjs-dist@2.2.228 react-transition-group@4.2.1 --save  //react-transition-group依赖出错问题
+cnpm  install  pdfjs-dist@2.2.228 react-transition-group@4.2.1  @babel/runtime   react-dates  --save
+//react-transition-group依赖出错问题
 
 #打包命令
 yarn build
