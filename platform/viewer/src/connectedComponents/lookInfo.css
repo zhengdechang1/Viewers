@@ -53,10 +53,10 @@
   line-height: 66px;
 }
 
-:where(.css-dev-only-do-not-override-26rdvq).ant-tree {
+.ant-tree {
   color: var(--ui-sky-blue);
 
-  background: #151a1f;
+  background: #151a1f !important;
 }
 
 .site-tree-search-value {
