@@ -112,6 +112,13 @@ class ToolbarRow extends Component {
       icon: 'th-large',
       bottomLabel: this.props.t('Series'),
     });
+
+    //查看元信息
+    this.buttonGroups.right.unshift({
+      value: 'look-info',
+      icon: 'search-plus',
+      bottomLabel: this.props.t('查看信息'),
+    });
   }
 
   componentDidMount() {
@@ -145,6 +152,7 @@ class ToolbarRow extends Component {
       prevProps.activeContexts !== this.props.activeContexts;
 
     const prevStudies = prevProps.studies;
+
     const prevActiveViewport = prevProps.activeViewport;
     const activeViewport = this.props.activeViewport;
     const studies = this.props.studies;

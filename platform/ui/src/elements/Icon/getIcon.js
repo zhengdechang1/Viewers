@@ -89,9 +89,11 @@ import youtube from './icons/youtube.svg';
 import eye from './icons/eye.svg';
 import eyeClosed from './icons/eye-closed.svg';
 import envelopeSquare from './icons/envelope-square.svg';
+import deleteSvg from './icons/delete.svg';
 
 const ICONS = {
   eye,
+  "delete": deleteSvg,
   'eye-closed': eyeClosed,
   brush,
   scissors,

@@ -1,3 +1,8 @@
+/*
+ * @Description:
+ * @Author: eleven
+ * @Date: 2022-11-21 21:22:32
+ */
 /**
  * Entry point for development and production PWA builds.
  * Packaged (NPM) builds go through `index-umd.js`
@@ -33,6 +38,7 @@ import OHIFDicomPDFExtension from '@ohif/extension-dicom-pdf';
 // Add this for Debugging purposes:
 //import OHIFDebuggingExtension from '@ohif/extension-debugging';
 import { version } from '../package.json';
+import ReplaceStr from './utils/replaceStr.js';
 
 /*
  * Default Settings
@@ -60,6 +66,29 @@ const appProps = {
 
 /** Create App */
 const app = React.createElement(App, appProps, null);
+
+let serve = new ReplaceStr(window.config.servers.dicomWeb[0])
+localStorage.setItem("defaultServe", JSON.stringify(serve.ip))
+
+let serverList = JSON.parse(localStorage.getItem("serverList"))
+
+
+const defaultServerList = [
+  { ip: '10.10.99.8', alias: "prod orthanc" },
+  { ip: '10.10.99.208', alias: "dev orthanc" },
+  { ip: '10.10.99.88', alias: "prod qimaging" },
+  { ip: '10.10.99.123', alias: "dev qimaging" },
+
+]
+
+if (JSON.stringify(serverList) == "{}" || !serverList) {
+  localStorage.setItem('serverList', JSON.stringify(defaultServerList.map(serve => {
+    return { key: serve.ip, ip: serve.ip, alias: serve.alias }
+  })))
+}
+
+
+
 
 /** Render */
 ReactDOM.render(app, document.getElementById('root'));
