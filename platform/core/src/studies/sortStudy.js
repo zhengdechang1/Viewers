@@ -1,3 +1,8 @@
+/*
+ * @Description:
+ * @Author: Devin
+ * @Date: 2022-11-21 21:23:56
+ */
 import getSeriesInfo from './getSeriesInfo';
 
 /**

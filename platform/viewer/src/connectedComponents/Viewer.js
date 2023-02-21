@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import OHIF, { MODULE_TYPES, DICOMSR } from '@ohif/core';
 import { withDialog } from '@ohif/ui';
 import moment from 'moment';
+import LookInfo from './lookInfo.js';
 
 import ConnectedHeader from './ConnectedHeader.js';
 import ToolbarRow from './ToolbarRow.js';
@@ -298,6 +299,10 @@ class Viewer extends Component {
           VisiblePanelRight = comp.component;
         } else if (comp.id === this.state.selectedLeftSidePanel) {
           VisiblePanelLeft = comp.component;
+        } else if ('look-info' === this.state.selectedRightSidePanel) {
+          VisiblePanelRight = props => (
+            <LookInfo state={this.state} {...props} {...this.props} />
+          );
         }
       });
     });

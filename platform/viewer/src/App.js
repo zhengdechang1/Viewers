@@ -45,7 +45,6 @@ import {
 
 /** Extensions */
 import { GenericViewerCommands, MeasurementsPanel } from './appExtensions';
-
 /** Viewer */
 import OHIFStandaloneViewer from './OHIFStandaloneViewer';
 
@@ -122,9 +121,28 @@ class App extends Component {
       routerBasename: '/',
     };
 
+    const newConfig = JSON.parse(localStorage.getItem('serve'));
+    const { qidoRoot, wadoRoot, wadoUriRoot } = { ...newConfig };
+
+    let newServers = config.servers;
+    if (qidoRoot && wadoRoot && wadoUriRoot) {
+      newServers = {
+        dicomWeb: [
+          {
+            ...config.servers.dicomWeb[0],
+            qidoRoot,
+            wadoRoot,
+            wadoUriRoot,
+          },
+        ],
+      };
+    }
+
     this._appConfig = {
       ...appDefaultConfig,
-      ...(typeof config === 'function' ? config({ servicesManager }) : config),
+      ...(typeof config === 'function'
+        ? config({ servicesManager })
+        : { ...config, servers: newServers }),
     };
 
     const {
@@ -352,7 +370,8 @@ function _makeAbsoluteIfNecessary(url, base_url) {
 /*
  * Only wrap/use hot if in dev.
  */
-const ExportedApp = process.env.NODE_ENV === 'development' ? hot(App) : App;
+const ExportedApp = process.env.NODE_ENV === 'development' ? App : App;
+// hot(App)
 
 export default ExportedApp;
 export { commandsManager, extensionManager, hotkeysManager, servicesManager };

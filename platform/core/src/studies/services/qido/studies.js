@@ -4,7 +4,8 @@ import DICOMWeb from '../../../DICOMWeb/';
 
 import errorHandler from '../../../errorHandler';
 import getXHRRetryRequestHook from '../../../utils/xhrRetryRequestHook';
-
+import { changeURL } from '../index';
+import ReplaceStr from '../../../../../viewer/src/utils/replaceStr';
 /**
  * Creates a QIDO date string for a date range query
  * Assumes the year is positive, at most 4 digits long.
@@ -109,18 +110,38 @@ function resultDataToStudies(resultData) {
       modalities: DICOMWeb.getString(
         DICOMWeb.getModalities(study['00080060'], study['00080061'])
       ),
+      aa: resultData,
     })
   );
 
   return studies;
 }
 
-export default function Studies(server, filter) {
+function Studies(server, filter) {
   const { staticWado } = server;
+  let replaceStr = new ReplaceStr(JSON.parse(localStorage.getItem('serve')));
+
+  if (JSON.stringify(replaceStr.serve) == '{}') {
+    replaceStr = new ReplaceStr(
+      JSON.parse(localStorage.getItem('defaultServe'))
+    );
+  }
+  let serve = replaceStr.serve;
+
+  if (process.env.NODE_ENV === 'development') {
+    serve = replaceStr.devServe;
+  }
+
+  if (serve !== undefined || serve !== {}) {
+    server = { ...server, ...serve };
+  }
+
   const config = {
     ...server,
     url: server.qidoRoot,
-    headers: DICOMWeb.getAuthorizationHeader(server),
+    headers: {
+      ...DICOMWeb.getAuthorizationHeader(server),
+    },
     errorInterceptor: errorHandler.getHTTPErrorHandler(),
     requestHooks: [getXHRRetryRequestHook()],
   };
@@ -142,3 +163,5 @@ export default function Studies(server, filter) {
 
   return dicomWeb.searchForStudies(options).then(resultDataToStudies);
 }
+
+export default Studies;

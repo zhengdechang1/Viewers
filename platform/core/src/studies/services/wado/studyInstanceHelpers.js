@@ -33,6 +33,7 @@ function createStudy(server, aSopInstance) {
     NumberOfStudyRelatedInstances: DICOMWeb.getString(aSopInstance['00201208']),
     StudyInstanceUID: DICOMWeb.getString(aSopInstance['0020000D']),
     InstitutionName: DICOMWeb.getString(aSopInstance['00080080']),
+    originStudy: aSopInstance,
   };
 }
 
@@ -91,7 +92,7 @@ function buildInstanceFrameWadoRsUri(
   return `${baseWadoRsUri}/frames/${frame}`;
 }
 
-async function makeSOPInstance(server, study, instance) {
+async function makeSOPInstance(server, study, instance, seriesData) {
   const naturalizedInstance = await metadataProvider.addInstance(instance, {
     server,
   });
@@ -110,7 +111,6 @@ async function makeSOPInstance(server, study, instance) {
   if (StudyInstanceUID === undefined || validate(StudyInstanceUID)) {
     const error =
       'makeSOPInstance: StudyInstanceUID is not conforming with the UID (DICOM UI VR) character repertoire, skipping SOPInstance.';
-    console.error(error);
 
     return;
   }
@@ -118,7 +118,6 @@ async function makeSOPInstance(server, study, instance) {
   if (SeriesInstanceUID === undefined || validate(SeriesInstanceUID)) {
     const error =
       'makeSOPInstance: SeriesInstanceUID is not conforming with the UID (DICOM UI VR) character repertoire, skipping SOPInstance.';
-    console.error(error);
 
     return;
   }
@@ -126,7 +125,6 @@ async function makeSOPInstance(server, study, instance) {
   if (SOPInstanceUID === undefined || validate(SOPInstanceUID)) {
     const error =
       'makeSOPInstance: SOPInstanceUID is not conforming with the UID (DICOM UI VR) character repertoire, skipping SOPInstance.';
-    console.error(error);
 
     return;
   }
@@ -141,6 +139,7 @@ async function makeSOPInstance(server, study, instance) {
       SeriesNumber: naturalizedInstance.SeriesNumber,
       SeriesDate: naturalizedInstance.SeriesDate,
       SeriesTime: naturalizedInstance.SeriesTime,
+      naturalizedInstance: naturalizedInstance,
       instances: [],
     };
     study.seriesMap[SeriesInstanceUID] = series;
@@ -173,6 +172,8 @@ async function makeSOPInstance(server, study, instance) {
 
   const sopInstance = {
     metadata: naturalizedInstance,
+    originMetaData: instance,
+    seriesData: seriesData,
     baseWadoRsUri,
     wadouri,
     wadorsuri,
@@ -224,19 +225,25 @@ async function makeSOPInstance(server, study, instance) {
  * @param {Object} study The study descriptor to which the given SOP instances will be added
  * @param {Array} sopInstanceList A list of SOP instance objects
  */
-async function addInstancesToStudy(server, study, sopInstanceList) {
+async function addInstancesToStudy(server, study, sopInstanceList, seriesData) {
   return Promise.all(
     sopInstanceList.map(function(sopInstance) {
-      return makeSOPInstance(server, study, sopInstance);
+      return makeSOPInstance(server, study, sopInstance, seriesData);
     })
   );
 }
 
-const createStudyFromSOPInstanceList = async (server, sopInstanceList) => {
+const createStudyFromSOPInstanceList = async (
+  server,
+  sopInstanceList,
+  seriesData
+) => {
   if (Array.isArray(sopInstanceList) && sopInstanceList.length > 0) {
     const firstSopInstance = sopInstanceList[0];
     const study = createStudy(server, firstSopInstance);
-    await addInstancesToStudy(server, study, sopInstanceList);
+
+    await addInstancesToStudy(server, study, sopInstanceList, seriesData);
+    study['originSeriesData'] = seriesData;
     return study;
   }
   throw new Error('Failed to create study out of provided SOP instance list');
